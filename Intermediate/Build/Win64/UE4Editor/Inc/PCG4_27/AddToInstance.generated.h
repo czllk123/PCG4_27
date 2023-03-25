@@ -12,6 +12,7 @@ class AInstancedFoliageActor;
 struct FGuid;
 class UStaticMesh;
 struct FTransform;
+ struct FGuid;
 #ifdef PCG4_27_AddToInstance_generated_h
 #error "AddToInstance.generated.h already included, missing '#pragma once' in AddToInstance.h"
 #endif

@@ -20,7 +20,7 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category=AddToFoliage)
-		static bool AddToFoliageInstance(AInstancedFoliageActor* InstancedFoliageActor, UStaticMesh *InStaticMesh, FTransform Transform, FString SavePath, FGuid& FoliageUUID);
+		static bool AddToFoliageInstance(AInstancedFoliageActor* InstancedFoliageActor, UStaticMesh *InStaticMesh, int32 StaticMeshIndex, FTransform Transform, FString SavePath, TMap<int32, FGuid>& FoliageUUIDs);
 
 	UFUNCTION(BlueprintCallable, Category=AddToFoliage)
 		static bool RemoveFoliageInstance(AInstancedFoliageActor* InstancedFoliageActor, TArray<FGuid> FoliageInstanceUUID);

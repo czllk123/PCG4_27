@@ -29,7 +29,7 @@ AInstancedFoliageActor* UAddToInstance::GetOrCreateIFA()
 }
 
 
-bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFoliageActor, UStaticMesh* InStaticMesh, FTransform Transform, FString SavePath, FGuid& FoliageUUID)
+bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFoliageActor, UStaticMesh* InStaticMesh, int32 StaticMeshIndex, FTransform Transform, FString SavePath, TMap<int32, FGuid>& FoliageUUIDs)
 {
 	//如果IFA不存在或者无效，返回false
 	if(!InstancedFoliageActor || !IsValid(InstancedFoliageActor))
@@ -168,7 +168,8 @@ bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFolia
 			FoliageInfo->PostMoveInstances(InstancedFoliageActor,{ FoliageInstanceIndex });
 			
 			//输出植被的UUID
-			FoliageUUID = FoliageInstaceGuid;
+			
+			FoliageUUIDs.Add(StaticMeshIndex, FoliageInstaceGuid);
 			return true;
 			
 		}

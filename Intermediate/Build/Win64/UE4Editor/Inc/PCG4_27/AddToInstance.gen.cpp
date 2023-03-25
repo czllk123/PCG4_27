@@ -35,12 +35,13 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 	{
 		P_GET_OBJECT(AInstancedFoliageActor,Z_Param_InstancedFoliageActor);
 		P_GET_OBJECT(UStaticMesh,Z_Param_InStaticMesh);
+		P_GET_PROPERTY(FIntProperty,Z_Param_StaticMeshIndex);
 		P_GET_STRUCT(FTransform,Z_Param_Transform);
 		P_GET_PROPERTY(FStrProperty,Z_Param_SavePath);
-		P_GET_STRUCT_REF(FGuid,Z_Param_Out_FoliageUUID);
+		P_GET_TMAP_REF(int32,FGuid,Z_Param_Out_FoliageUUIDs);
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		*(bool*)Z_Param__Result=UAddToInstance::AddToFoliageInstance(Z_Param_InstancedFoliageActor,Z_Param_InStaticMesh,Z_Param_Transform,Z_Param_SavePath,Z_Param_Out_FoliageUUID);
+		*(bool*)Z_Param__Result=UAddToInstance::AddToFoliageInstance(Z_Param_InstancedFoliageActor,Z_Param_InStaticMesh,Z_Param_StaticMeshIndex,Z_Param_Transform,Z_Param_SavePath,Z_Param_Out_FoliageUUIDs);
 		P_NATIVE_END;
 	}
 	DEFINE_FUNCTION(UAddToInstance::execGetOrCreateIFA)
@@ -66,16 +67,20 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 		{
 			AInstancedFoliageActor* InstancedFoliageActor;
 			UStaticMesh* InStaticMesh;
+			int32 StaticMeshIndex;
 			FTransform Transform;
 			FString SavePath;
-			FGuid FoliageUUID;
+			TMap<int32,FGuid> FoliageUUIDs;
 			bool ReturnValue;
 		};
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_InstancedFoliageActor;
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_InStaticMesh;
+		static const UE4CodeGen_Private::FIntPropertyParams NewProp_StaticMeshIndex;
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_Transform;
 		static const UE4CodeGen_Private::FStrPropertyParams NewProp_SavePath;
-		static const UE4CodeGen_Private::FStructPropertyParams NewProp_FoliageUUID;
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_FoliageUUIDs_ValueProp;
+		static const UE4CodeGen_Private::FIntPropertyParams NewProp_FoliageUUIDs_Key_KeyProp;
+		static const UE4CodeGen_Private::FMapPropertyParams NewProp_FoliageUUIDs;
 		static void NewProp_ReturnValue_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
@@ -86,9 +91,12 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 	};
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_InstancedFoliageActor = { "InstancedFoliageActor", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventAddToFoliageInstance_Parms, InstancedFoliageActor), Z_Construct_UClass_AInstancedFoliageActor_NoRegister, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_InStaticMesh = { "InStaticMesh", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventAddToFoliageInstance_Parms, InStaticMesh), Z_Construct_UClass_UStaticMesh_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_StaticMeshIndex = { "StaticMeshIndex", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventAddToFoliageInstance_Parms, StaticMeshIndex), METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_Transform = { "Transform", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventAddToFoliageInstance_Parms, Transform), Z_Construct_UScriptStruct_FTransform, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_SavePath = { "SavePath", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventAddToFoliageInstance_Parms, SavePath), METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_FoliageUUID = { "FoliageUUID", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventAddToFoliageInstance_Parms, FoliageUUID), Z_Construct_UScriptStruct_FGuid, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_FoliageUUIDs_ValueProp = { "FoliageUUIDs", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 1, Z_Construct_UScriptStruct_FGuid, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_FoliageUUIDs_Key_KeyProp = { "FoliageUUIDs_Key", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FMapPropertyParams Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_FoliageUUIDs = { "FoliageUUIDs", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Map, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventAddToFoliageInstance_Parms, FoliageUUIDs), EMapPropertyFlags::None, METADATA_PARAMS(nullptr, 0) };
 	void Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_ReturnValue_SetBit(void* Obj)
 	{
 		((AddToInstance_eventAddToFoliageInstance_Parms*)Obj)->ReturnValue = 1;
@@ -97,9 +105,12 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_InstancedFoliageActor,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_InStaticMesh,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_StaticMeshIndex,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_Transform,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_SavePath,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_FoliageUUID,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_FoliageUUIDs_ValueProp,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_FoliageUUIDs_Key_KeyProp,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_FoliageUUIDs,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::NewProp_ReturnValue,
 	};
 #if WITH_METADATA
@@ -219,7 +230,7 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_PCG4_27,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UAddToInstance_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance, "AddToFoliageInstance" }, // 676615885
+		{ &Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance, "AddToFoliageInstance" }, // 2474687335
 		{ &Z_Construct_UFunction_UAddToInstance_GetOrCreateIFA, "GetOrCreateIFA" }, // 3550168888
 		{ &Z_Construct_UFunction_UAddToInstance_RemoveFoliageInstance, "RemoveFoliageInstance" }, // 3095065209
 	};
@@ -257,7 +268,7 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UAddToInstance, 2854942750);
+	IMPLEMENT_CLASS(UAddToInstance, 1336961836);
 	template<> PCG4_27_API UClass* StaticClass<UAddToInstance>()
 	{
 		return UAddToInstance::StaticClass();
