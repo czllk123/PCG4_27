@@ -17,6 +17,8 @@
 #include "InstancedFoliageActor.h"
 #include "Subsystems/AssetEditorSubsystem.h"
 
+
+
 AInstancedFoliageActor* UAddToInstance::GetOrCreateIFA()
 {
 	//获取当前关卡
@@ -76,25 +78,41 @@ bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFolia
 		const FString AssetName = FoliageTypeName;
 		const FString PackageName = AssetPath + AssetName;
 
+		//创建一个新的空的资源包
+		UPackage* NewPackage  = CreatePackage(nullptr, *PackageName);
+		
+		// 加载资源包到内存
+		NewPackage->FullyLoad();
+
 		// 检查资产是否已存在，如果已存在，则什么都不做
-		UPackage* AssetPackage = CreatePackage(nullptr, *PackageName);
-		AssetPackage->FullyLoad();
-		if (UObject* ExistingAsset = FindObject<UObject>(AssetPackage,*AssetName ))
+		if (UObject* ExistingAsset = FindObject<UObject>(NewPackage, *AssetName ))
 		{
 			return false;
 		}
 		
 		//DuplicateObject函数创建一个新的 UFoliageType 对象，它将复制源 FoliageType 对象的属性和值，并且将outer更改为AssetPackage用于保存上面新建的FoliageType文件，在这个地方对FoliageType进行设置
-		UFoliageType* FoliageTypeAsset = DuplicateObject<UFoliageType>(FoliageType,AssetPackage);
+		UFoliageType* FoliageTypeAsset = DuplicateObject<UFoliageType>(FoliageType, NewPackage);
 		FoliageTypeAsset->SetSource(InStaticMesh);
 		InstancedFoliageActor->AddFoliageType(FoliageTypeAsset);
 
-		// Mark the package as modified so it gets updated when saving
-		AssetPackage->MarkPackageDirty();
+		if (FoliageTypeAsset != nullptr)
+		{
+			// 标记资源包为"脏"
+			bool bIsMarkedDirty = NewPackage->MarkPackageDirty();
 
+			if (bIsMarkedDirty)
+			{
+				UE_LOG(LogTemp, Log, TEXT("AssetPackage has been successfully marked as dirty."));
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Failed to mark AssetPackage as dirty."));
+			}
+		}
+		
 		// 保存资产
 		const FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-		bool const bSaved = UPackage::SavePackage(AssetPackage, FoliageTypeAsset, EObjectFlags::RF_Public | EObjectFlags::RF_Standalone, *PackageName, GError, nullptr, false, true, SAVE_None);
+		bool const bSaved = UPackage::SavePackage(NewPackage, FoliageTypeAsset, EObjectFlags::RF_Public | EObjectFlags::RF_Standalone, *PackageName, GError, nullptr, false, true, SAVE_None);
 		if (bSaved)
 		{
 			// 通知资产注册表有关新资产的信息
@@ -170,13 +188,16 @@ bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFolia
 			//输出植被的UUID
 			
 			FoliageUUIDs.Add(StaticMeshIndex, FoliageInstaceGuid);
+
+			//刷新新指定的 InstancedFoliageActor 中的植被信息。
+			FoliageInfo->Refresh(InstancedFoliageActor,true, true);
+			
 			return true;
 			
 		}
 		//Refresh Foliage Editor
-		//IFoliageEditModule& FoliageEd = FModuleManager::Get().GetModuleChecked<IFoliageEditModule>("FoliageEdit");
-		//FoliageEd.UpdateMeshList();
-		FoliageInfo->Refresh(InstancedFoliageActor,true, true);
+		//IFoliageEditModule& FoliageEditModule = FModuleManager::LoadModuleChecked<IFoliageEditModule>("FoliageEdit");
+		//FoliageEditModule.UpdateMeshList();
 		
 	}
 	return false;
