@@ -21,6 +21,7 @@ struct FTransform;
 #define AddToFoliage4_27_Plugins_PCG4_27_Source_PCG4_27_Public_AddToInstance_h_16_SPARSE_DATA
 #define AddToFoliage4_27_Plugins_PCG4_27_Source_PCG4_27_Public_AddToInstance_h_16_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execCalculateWeightAverage); \
 	DECLARE_FUNCTION(execRemoveFoliageInstance); \
 	DECLARE_FUNCTION(execAddToFoliageInstance); \
 	DECLARE_FUNCTION(execGetOrCreateIFA);
@@ -28,6 +29,7 @@ struct FTransform;
 
 #define AddToFoliage4_27_Plugins_PCG4_27_Source_PCG4_27_Public_AddToInstance_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execCalculateWeightAverage); \
 	DECLARE_FUNCTION(execRemoveFoliageInstance); \
 	DECLARE_FUNCTION(execAddToFoliageInstance); \
 	DECLARE_FUNCTION(execGetOrCreateIFA);

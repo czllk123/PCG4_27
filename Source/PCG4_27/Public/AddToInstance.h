@@ -25,5 +25,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category=AddToFoliage)
 		static bool RemoveFoliageInstance(AInstancedFoliageActor* InstancedFoliageActor, TArray<FGuid> FoliageInstanceUUID);
 
+	UFUNCTION(BlueprintCallable, Category=AddToFoliage)
+		static TArray<int32> CalculateWeightAverage(const TArray<float>& Weights, int32 OutputSize);
+
 	static bool CheckInstanceLocationOverlap( FFoliageInfo* FoliageInfo,  FVector Location, float Tolerance = 0.1f);
 };

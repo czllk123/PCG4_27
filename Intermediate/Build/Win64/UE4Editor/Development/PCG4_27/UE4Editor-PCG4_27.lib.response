@@ -1,0 +1,13 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-PCG4_27.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"G:\Unreal Projects\AddToFoliage4_27\Intermediate\Build\Win64\TestEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"G:\Unreal Projects\AddToFoliage4_27\Plugins\PCG4_27\Intermediate\Build\Win64\UE4Editor\Development\PCG4_27\Module.PCG4_27.cpp.obj"
+"G:\Unreal Projects\AddToFoliage4_27\Plugins\PCG4_27\Intermediate\Build\Win64\UE4Editor\Development\PCG4_27\Module.PCG4_27.gen.cpp.obj"
+"G:\Unreal Projects\AddToFoliage4_27\Plugins\PCG4_27\Intermediate\Build\Win64\UE4Editor\Development\PCG4_27\Default.rc2.res"
+/OUT:"G:\Unreal Projects\AddToFoliage4_27\Plugins\PCG4_27\Intermediate\Build\Win64\UE4Editor\Development\PCG4_27\UE4Editor-PCG4_27.lib"

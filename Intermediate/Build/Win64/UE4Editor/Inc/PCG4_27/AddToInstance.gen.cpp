@@ -22,6 +22,15 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FTransform();
 	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FGuid();
 // End Cross Module References
+	DEFINE_FUNCTION(UAddToInstance::execCalculateWeightAverage)
+	{
+		P_GET_TARRAY_REF(float,Z_Param_Out_Weights);
+		P_GET_PROPERTY(FIntProperty,Z_Param_OutputSize);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(TArray<int32>*)Z_Param__Result=UAddToInstance::CalculateWeightAverage(Z_Param_Out_Weights,Z_Param_OutputSize);
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(UAddToInstance::execRemoveFoliageInstance)
 	{
 		P_GET_OBJECT(AInstancedFoliageActor,Z_Param_InstancedFoliageActor);
@@ -56,6 +65,7 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 		UClass* Class = UAddToInstance::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
 			{ "AddToFoliageInstance", &UAddToInstance::execAddToFoliageInstance },
+			{ "CalculateWeightAverage", &UAddToInstance::execCalculateWeightAverage },
 			{ "GetOrCreateIFA", &UAddToInstance::execGetOrCreateIFA },
 			{ "RemoveFoliageInstance", &UAddToInstance::execRemoveFoliageInstance },
 		};
@@ -126,6 +136,61 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 		if (!ReturnFunction)
 		{
 			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics
+	{
+		struct AddToInstance_eventCalculateWeightAverage_Parms
+		{
+			TArray<float> Weights;
+			int32 OutputSize;
+			TArray<int32> ReturnValue;
+		};
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_Weights_Inner;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Weights_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_Weights;
+		static const UE4CodeGen_Private::FIntPropertyParams NewProp_OutputSize;
+		static const UE4CodeGen_Private::FIntPropertyParams NewProp_ReturnValue_Inner;
+		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_Weights_Inner = { "Weights", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, METADATA_PARAMS(nullptr, 0) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_Weights_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif
+	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_Weights = { "Weights", nullptr, (EPropertyFlags)0x0010000008000182, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventCalculateWeightAverage_Parms, Weights), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_Weights_MetaData, UE_ARRAY_COUNT(Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_Weights_MetaData)) };
+	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_OutputSize = { "OutputSize", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventCalculateWeightAverage_Parms, OutputSize), METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_ReturnValue_Inner = { "ReturnValue", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AddToInstance_eventCalculateWeightAverage_Parms, ReturnValue), EArrayPropertyFlags::None, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_Weights_Inner,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_Weights,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_OutputSize,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_ReturnValue_Inner,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::NewProp_ReturnValue,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::Function_MetaDataParams[] = {
+		{ "Category", "AddToFoliage" },
+		{ "ModuleRelativePath", "Public/AddToInstance.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UAddToInstance, nullptr, "CalculateWeightAverage", nullptr, nullptr, sizeof(AddToInstance_eventCalculateWeightAverage_Parms), Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -231,6 +296,7 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UAddToInstance_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UAddToInstance_AddToFoliageInstance, "AddToFoliageInstance" }, // 2474687335
+		{ &Z_Construct_UFunction_UAddToInstance_CalculateWeightAverage, "CalculateWeightAverage" }, // 2714104848
 		{ &Z_Construct_UFunction_UAddToInstance_GetOrCreateIFA, "GetOrCreateIFA" }, // 3550168888
 		{ &Z_Construct_UFunction_UAddToInstance_RemoveFoliageInstance, "RemoveFoliageInstance" }, // 3095065209
 	};
@@ -268,7 +334,7 @@ void EmptyLinkFunctionForGeneratedCodeAddToInstance() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UAddToInstance, 1336961836);
+	IMPLEMENT_CLASS(UAddToInstance, 812536880);
 	template<> PCG4_27_API UClass* StaticClass<UAddToInstance>()
 	{
 		return UAddToInstance::StaticClass();

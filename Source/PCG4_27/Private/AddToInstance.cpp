@@ -243,6 +243,34 @@ bool UAddToInstance::RemoveFoliageInstance(AInstancedFoliageActor* InstancedFoli
 	return true;
 }
 
+TArray<int32> UAddToInstance::CalculateWeightAverage(const TArray<float>& Weights, int32 OutputSize)
+{
+	TArray<int32> result;
+
+	// 计算权重总和
+	float sum_weights = 0.0f;
+	for (const float weight : Weights) {
+		sum_weights += weight;
+	}
+
+	// 根据权重随机生成索引
+	for (int32 i = 0; i < OutputSize; i++) {
+		float rand_weight = FMath::RandRange(0.0f, sum_weights);
+		float accum_weight = 0.0f;
+
+		for (int32 j = 0; j < Weights.Num(); j++) {
+			accum_weight += Weights[j];
+
+			if (rand_weight <= accum_weight) {
+				result.Add(j);
+				break;
+			}
+		}
+	}
+
+	return result;
+}
+
 // 检查是否已经存在具有相同位置的实例
 bool UAddToInstance::CheckInstanceLocationOverlap( FFoliageInfo* FoliageInfo,  FVector Location, float Tolerance)
 {
