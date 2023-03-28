@@ -7,15 +7,11 @@
 #include "ContentBrowserModule.h"
 #include "UObject/UObjectGlobals.h"
 #include "FoliageEditModule.h"
-#include "FoliageType_Actor.h"
 #include "UObject/Package.h"
-#include "Editor/UnrealEd/Public/Editor.h"
-#include "Editor/ContentBrowser/Public/IContentBrowserSingleton.h"
-#include "Editor/ContentBrowser/Public/ContentBrowserModule.h"
 #include "Misc/Guid.h"
-
 #include "InstancedFoliageActor.h"
-#include "Subsystems/AssetEditorSubsystem.h"
+#include "IContentBrowserSingleton.h"
+
 
 
 
@@ -45,7 +41,7 @@ bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFolia
 	FoliageInstaceGuid = FGuid::NewGuid();
 	
 	//打印当前植被的UUID
-	UE_LOG(LogTemp, Warning, TEXT("FoliageInstaceGuid is : %s"), *FoliageInstaceGuid.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("FoliageInstaceGuid is : %s"), *FoliageInstaceGuid.ToString());
 	
 	//获取给定static mesh 所有的Foliage Type,这里的FoliageType 类型必须是UFoliageType，不能是 UFoliageType_InstancedStaticMesh，要不然下面那个函数用不了
 	TArray<const UFoliageType*> FoliageTypes;
@@ -60,13 +56,12 @@ bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFolia
 		//这个新建的FoliageType对象的Outer为InstancedFoliageActor，用于实例化植被
 		FoliageType = NewObject<UFoliageType_InstancedStaticMesh>(InstancedFoliageActor, *FoliageTypeName,RF_Public | RF_Standalone);
 		//这个地方别对这个foliageType做任何更改，只是将他创建出来用来撒点，最后将这个保存成foliageType文件，然后对它做相应的设置
-		//FoliageType->SetSource(InStaticMesh);
-		//InstancedFoliageActor->AddFoliageType(FoliageType);
 
 		
 		// 设置资产保存的目标路径
 		//FString Path = TEXT("/Game/MyFoliageTypes/"); // 自定义保存路径
 		FString AssetPath;
+		//SavePath是传进来的参数
 		if(SavePath.IsEmpty())
 		{
 			AssetPath = TEXT("/Game/FoliageTypes/");
@@ -75,44 +70,67 @@ bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFolia
 		{
 			AssetPath = SavePath;
 		}
-		const FString AssetName = FoliageTypeName;
-		const FString PackageName = AssetPath + AssetName;
+		FString AssetName = FoliageTypeName;
+		//FoliageType的相对路径,这个只用来新建Object,保存FolaigeType还是得用绝对路径
+		FString PackagePath = AssetPath + AssetName;
+		
+		//当前项目Content目录的绝对路径
+		FString ProjectContentPath = FPaths::ProjectContentDir();
+		
+		//减去“/Game/”后的AssetPath剩余路径
+		FString SubPath = AssetPath.RightChop(6); // 6 is the length of "/Game/"
 
+		//拼接完成后储存FoliageType的绝对路径
+		FString FullPath = FPaths::Combine(ProjectContentPath, SubPath);
+		
+		//删除多于斜杠 //content->/content
+		 FPaths::RemoveDuplicateSlashes(FullPath);
+
+		
 		//创建一个新的空的资源包
-		UPackage* NewPackage  = CreatePackage(nullptr, *PackageName);
+		UPackage* NewPackage  = CreatePackage(nullptr, *PackagePath);
 		
 		// 加载资源包到内存
 		NewPackage->FullyLoad();
-
+		
 		// 检查资产是否已存在，如果已存在，则什么都不做
-		if (UObject* ExistingAsset = FindObject<UObject>(NewPackage, *AssetName ))
+		if (FindObject<UObject>(NewPackage, *AssetName ))
 		{
 			return false;
 		}
 		
 		//DuplicateObject函数创建一个新的 UFoliageType 对象，它将复制源 FoliageType 对象的属性和值，并且将outer更改为AssetPackage用于保存上面新建的FoliageType文件，在这个地方对FoliageType进行设置
-		UFoliageType* FoliageTypeAsset = DuplicateObject<UFoliageType>(FoliageType, NewPackage);
+		UFoliageType* FoliageTypeAsset = DuplicateObject<UFoliageType>(FoliageType, NewPackage, *AssetName);
+		
+		//设置FoliageType相关属性
 		FoliageTypeAsset->SetSource(InStaticMesh);
 		InstancedFoliageActor->AddFoliageType(FoliageTypeAsset);
 
+		FAssetRegistryModule::AssetCreated(FoliageTypeAsset);
+		
+		//标脏要设置给具体的Asset, 上面新建的NewPackage到“DuplicateObject”函数后就没用了
 		if (FoliageTypeAsset != nullptr)
 		{
 			// 标记资源包为"脏"
-			bool bIsMarkedDirty = NewPackage->MarkPackageDirty();
+			bool bIsMarkedDirty = FoliageTypeAsset->MarkPackageDirty();
 
 			if (bIsMarkedDirty)
 			{
-				UE_LOG(LogTemp, Log, TEXT("AssetPackage has been successfully marked as dirty."));
+				UE_LOG(LogTemp, Log, TEXT("FoliageTypeAsset has been successfully marked as dirty."));
 			}
 			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Failed to mark AssetPackage as dirty."));
+				UE_LOG(LogTemp, Warning, TEXT("Failed to mark FoliageTypeAsset as dirty."));
 			}
 		}
 		
 		// 保存资产
+		FString FilePath = FString::Printf(TEXT("%s%s%s"), *FullPath, *AssetName, *FPackageName::GetAssetPackageExtension());
+		bool const bSaved = UPackage::SavePackage(NewPackage, FoliageTypeAsset, EObjectFlags::RF_Public | EObjectFlags::RF_Standalone, *FilePath);
+		
+		/*
 		const FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-		bool const bSaved = UPackage::SavePackage(NewPackage, FoliageTypeAsset, EObjectFlags::RF_Public | EObjectFlags::RF_Standalone, *PackageName, GError, nullptr, false, true, SAVE_None);
+		
 		if (bSaved)
 		{
 			// 通知资产注册表有关新资产的信息
@@ -128,7 +146,7 @@ bool UAddToInstance::AddToFoliageInstance(AInstancedFoliageActor* InstancedFolia
 		// After saving the asset and updating the asset registry
 		const FContentBrowserModule& ContentBrowserModule = FModuleManager::LoadModuleChecked<FContentBrowserModule>("ContentBrowser");
 		ContentBrowserModule.Get().SyncBrowserToAssets(TArray<FAssetData>{ FAssetData(FoliageTypeAsset) });
-	
+		*/
 	}
 	else
 	{
