@@ -10,6 +10,101 @@
 /**
  * 
  */
+USTRUCT(BlueprintType)
+struct FBPSelected
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category=AddToFoliage)
+	FName LayerToScatter = TEXT("");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AddToFoliage)
+	float Weight = 1.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AddToFoliage)
+	FVector2D Scale = FVector2D(.8f, 1.3f);;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AddToFoliage)
+	AActor* BluePrint;
+};
+
+USTRUCT(BlueprintType)
+struct FScatterData
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AddToFoliage)
+	TMap<int32, FTransform> ScatterPointCloud; 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	//直接引用上面的结构体，不需要指针
+	FBPSelected CurrentBP;
+};
+
+
+USTRUCT(BlueprintType)
+struct FPerMeshSetting
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AddToFoliage)
+	float Weight = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AddToFoliage)
+	FVector2D RandomScale = FVector2D(.8f, 1.3f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=AddToFoliage)
+	UStaticMesh* Mesh;
+};
+
+
+USTRUCT(BlueprintType)
+struct FLayerSetting
+{
+	GENERATED_BODY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	int32 ScatterCounts = 3;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	float MatchNormalRatio = .2f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	FVector2D MixMaxRadius = FVector2D(.8f, 1.3f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	FVector2D RadomZRoatation = FVector2D(0, 360);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	FPerMeshSetting Mesh;
+};
+
+USTRUCT(BlueprintType)
+struct FSpawnPoints
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	FVector points;
+};
+
+USTRUCT(BlueprintType)
+struct FStoredSpawns
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	FTransform PointLocations;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	UStaticMesh* Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= AddToFoliage)
+	float MatchNormalRatio = .2f;
+	
+};
+
+
+
 UCLASS()
 class  UAddToInstance : public UBlueprintFunctionLibrary
 {
